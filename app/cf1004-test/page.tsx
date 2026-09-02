@@ -1,6 +1,10 @@
 import { cookies, headers } from "next/headers";
 import { computeHeaderSizeBreakdown } from "@/lib/header-size";
 
+// Forces this page to re-render (and re-log at_origin) on every request instead
+// of being served from Next.js's own render cache, which was masking repeat hits.
+export const dynamic = "force-dynamic";
+
 const COOKIE_PREFIX = "cf1004_";
 
 export default async function Cf1004TestPage() {
