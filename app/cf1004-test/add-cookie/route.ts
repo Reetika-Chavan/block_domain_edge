@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const COOKIE_PREFIX = "cf1004_";
 const CHUNK_BYTES = 1000; // 1KB per cookie
-const TARGET_KB = 7;
+const TARGET_KB = 7.6;
+const TOTAL_FILLER_BYTES = Math.round(TARGET_KB * 1000);
 
 // request.url reflects the origin's internal address behind Launch's proxy, not
 // the public domain the browser used, so redirects must be built from the
@@ -20,12 +21,16 @@ export async function GET(request: NextRequest) {
   for (const cookie of existing) {
     response.cookies.delete(cookie.name);
   }
-  const filler = "x".repeat(CHUNK_BYTES);
-  for (let i = 0; i < TARGET_KB; i++) {
-    response.cookies.set(`${COOKIE_PREFIX}${i}`, filler, {
+  let remainingBytes = TOTAL_FILLER_BYTES;
+  let i = 0;
+  while (remainingBytes > 0) {
+    const chunkBytes = Math.min(CHUNK_BYTES, remainingBytes);
+    response.cookies.set(`${COOKIE_PREFIX}${i}`, "x".repeat(chunkBytes), {
       path: "/",
       sameSite: "lax",
     });
+    remainingBytes -= chunkBytes;
+    i++;
   }
   return response;
 }
