@@ -18,11 +18,13 @@ export default async function Cf1004TestPage() {
           CF1004 Header Size Test
         </h1>
         <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-          Deploy this project on Contentstack Launch, then use the links below
-          to set this domain&apos;s Cookie header to an exact size. Cloudflare
-          caps total request headers at <strong>8 KB</strong>, so requests at
-          or above that should start failing with{" "}
-          <code>HTTP 413 / CF1004</code> instead of loading.
+          Deploy this project on Contentstack Launch, then use the link below
+          to set this domain&apos;s Cookie header to <strong>5 KB</strong>.
+          The edge function logs the total incoming header size on every
+          request, so you can see how much headroom is left before the
+          platform&apos;s own layers push it over Cloudflare&apos;s{" "}
+          <strong>8 KB</strong> cap and it starts failing with{" "}
+          <code>HTTP 413 / CF1004</code>.
         </p>
 
         <div className="rounded border border-zinc-300 dark:border-zinc-700 p-4 w-full">
@@ -39,20 +41,8 @@ export default async function Cf1004TestPage() {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <a href="/cf1004-test/add-cookie?kb=4" className="underline">
-            Set to 4 KB
-          </a>
-          <a href="/cf1004-test/add-cookie?kb=7" className="underline">
-            Set to 7 KB
-          </a>
-          <a href="/cf1004-test/add-cookie?kb=8" className="underline">
-            Set to 8 KB
-          </a>
-          <a href="/cf1004-test/add-cookie?kb=9" className="underline">
-            Set to 9 KB
-          </a>
-          <a href="/cf1004-test/add-cookie?kb=12" className="underline">
-            Set to 12 KB
+          <a href="/cf1004-test/add-cookie" className="underline">
+            Set cookies to 5 KB
           </a>
           <a href="/cf1004-test/clear" className="underline">
             Clear test cookies
@@ -60,11 +50,13 @@ export default async function Cf1004TestPage() {
         </div>
 
         <p className="text-sm text-zinc-500 dark:text-zinc-500">
-          Each link resets the test cookies to exactly that many 1 KB cookies
-          via <code>Set-Cookie</code> and redirects back here, so the redirect
-          request itself carries the resized header — that request is where
-          you should expect the 413 to appear once you cross 8 KB. Try 7 KB
-          (should load) then 8 or 9 KB (should 413) to confirm the boundary.
+          The link resets the test cookies to exactly 5 KB via{" "}
+          <code>Set-Cookie</code> and redirects back here, so the redirect
+          request itself carries the resized header. Check the edge
+          function&apos;s logs in the Launch dashboard for the{" "}
+          <code>cf1004_header_size</code> entry on each request to see the
+          total header size and how much of it isn&apos;t from these test
+          cookies.
         </p>
       </main>
     </div>

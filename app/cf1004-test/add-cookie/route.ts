@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const COOKIE_PREFIX = "cf1004_";
-const CHUNK_BYTES = 1000; // 1KB per cookie, so `kb` maps directly to cookie count
+const CHUNK_BYTES = 1000; // 1KB per cookie
+const TARGET_KB = 5;
 
 // request.url reflects the origin's internal address behind Launch's proxy, not
 // the public domain the browser used, so redirects must be built from the
@@ -13,7 +14,6 @@ function publicOrigin(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  const kb = Number(request.nextUrl.searchParams.get("kb") || "1");
   const existing = request.cookies.getAll().filter((c) => c.name.startsWith(COOKIE_PREFIX));
 
   const response = NextResponse.redirect(new URL("/cf1004-test", publicOrigin(request)));
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     response.cookies.delete(cookie.name);
   }
   const filler = "x".repeat(CHUNK_BYTES);
-  for (let i = 0; i < kb; i++) {
+  for (let i = 0; i < TARGET_KB; i++) {
     response.cookies.set(`${COOKIE_PREFIX}${i}`, filler, {
       path: "/",
       sameSite: "lax",
