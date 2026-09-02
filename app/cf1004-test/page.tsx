@@ -1,12 +1,10 @@
 import { cookies, headers } from "next/headers";
 import { computeHeaderSizeBreakdown } from "@/lib/header-size";
 
-// Forces this page to re-render (and re-log at_origin) on every request instead of
-// being served from Next.js's own render cache or Cloudflare's edge cache — both were
-// masking repeat hits, since neither varies the cached response by Cookie.
+// Opts out of Next.js's Full Route Cache. Per the Launch caching guide, this alone
+// does not change the wire Cache-Control header — Launch's CDN caches strictly on
+// the literal Cache-Control header, which is set explicitly in middleware.ts.
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
 
 const COOKIE_PREFIX = "cf1004_";
 
@@ -39,7 +37,7 @@ export default async function Cf1004TestPage() {
         </h1>
         <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-400">
           Deploy this project on Contentstack Launch, then use the link below
-          to set this domain&apos;s Cookie header to <strong>7.9 KB</strong>.
+          to set this domain&apos;s Cookie header to <strong>7.8 KB</strong>.
           The edge function logs the total incoming header size on every
           request, so you can see the exact byte count once the
           platform&apos;s own layers push the total past Cloudflare&apos;s
@@ -61,7 +59,7 @@ export default async function Cf1004TestPage() {
 
         <div className="flex flex-wrap gap-3">
           <a href="/cf1004-test/add-cookie" className="underline">
-            Set cookies to 7.9 KB
+            Set cookies to 7.8 KB
           </a>
           <a href="/cf1004-test/clear" className="underline">
             Clear test cookies
@@ -69,7 +67,7 @@ export default async function Cf1004TestPage() {
         </div>
 
         <p className="text-sm text-zinc-500 dark:text-zinc-500">
-          The link resets the test cookies to exactly 7.9 KB via{" "}
+          The link resets the test cookies to exactly 7.8 KB via{" "}
           <code>Set-Cookie</code> and redirects back here, so the redirect
           request itself carries the resized header. Check the edge
           function&apos;s logs in the Launch dashboard for the{" "}
