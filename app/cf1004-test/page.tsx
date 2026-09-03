@@ -14,7 +14,7 @@ export default async function Cf1004TestPage() {
   // nginx. It's the only point in this repo where nginx's own additions
   // (x-launch-customer-auth, x-launch-origin-auth, AWS/GCP signing headers) are
   // visible, since they're injected after the edge function's fetch(request) call.
-  console.log(JSON.stringify(computeHeaderSizeBreakdown(headerStore)));
+  console.log(JSON.stringify({ checkpoint: "origin", ...computeHeaderSizeBreakdown(headerStore) }));
 
   const cookieStore = await cookies();
   const all = cookieStore.getAll();

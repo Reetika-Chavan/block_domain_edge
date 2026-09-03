@@ -27,6 +27,7 @@ export default function handler(request, _context) {
   const { launchHeaderBytes, applicationHeaderBytes } = measureHeaderSize(request.headers);
 
   console.log(JSON.stringify({
+    checkpoint: "edge",
     applicationHeaderKB: toKB(applicationHeaderBytes),
     launchHeaderKB: toKB(launchHeaderBytes),
   }));
