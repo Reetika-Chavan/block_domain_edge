@@ -32,12 +32,12 @@ export default async function Cf1004TestPage() {
           CF1004 Header Size Test
         </h1>
         <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-          Deploy this project on Contentstack Launch, then use the link below
-          to set this domain&apos;s Cookie header to <strong>5.0 KB</strong>.
-          The edge function logs the total incoming header size on every
-          request, so you can see the exact byte count once the
-          platform&apos;s own layers push the total past Cloudflare&apos;s
-          limit and it starts failing with <code>HTTP 413 / CF1004</code>.
+          Deploy this project on Contentstack Launch, then use the links below
+          to set this domain&apos;s Cookie header to different sizes. The
+          edge function logs the total incoming header size on every request,
+          so you can see the exact byte count once the platform&apos;s own
+          layers push the total past Cloudflare&apos;s limit and it starts
+          failing with <code>HTTP 413 / CF1004</code>.
         </p>
 
         <div className="rounded border border-zinc-300 dark:border-zinc-700 p-4 w-full">
@@ -54,22 +54,28 @@ export default async function Cf1004TestPage() {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <a href="/cf1004-test/add-cookie" className="underline">
-            Set cookies to 5.0 KB
-          </a>
+          {[5, 5.5, 6, 6.5, 7, 7.5, 8].map((kb) => (
+            <a
+              key={kb}
+              href={`/cf1004-test/add-cookie?kb=${kb}`}
+              className="underline"
+            >
+              Set cookies to {kb} KB
+            </a>
+          ))}
           <a href="/cf1004-test/clear" className="underline">
             Clear test cookies
           </a>
         </div>
 
         <p className="text-sm text-zinc-500 dark:text-zinc-500">
-          The link resets the test cookies to exactly 5.0 KB via{" "}
+          Each link resets the test cookies to that size via{" "}
           <code>Set-Cookie</code> and redirects back here, so the redirect
           request itself carries the resized header. Check the edge
-          function&apos;s logs in the Launch dashboard for the{" "}
-          <code>cf1004_header_size</code> entry on each request to see the
-          total header size and how much of it isn&apos;t from these test
-          cookies.
+          function&apos;s logs in the Launch dashboard on each request to see
+          the total header size, the largest header, and — once you pick a
+          size that trips <code>HTTP 413 / CF1004</code> — the last
+          successful size right below it.
         </p>
 
         <MultiHeaderTest />
