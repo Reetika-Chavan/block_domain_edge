@@ -1,5 +1,4 @@
-import { cookies, headers } from "next/headers";
-import { computeHeaderSizeBreakdown } from "@/lib/header-size";
+import { cookies } from "next/headers";
 import MultiHeaderTest from "./MultiHeaderTest";
 import ProxyHeaderTest from "./ProxyHeaderTest";
 
@@ -11,13 +10,8 @@ export const dynamic = "force-dynamic";
 const COOKIE_PREFIX = "cf1004_";
 
 export default async function Cf1004TestPage() {
-  const headerStore = await headers();
-  // This page runs on origin compute, downstream of both the edge function and
-  // nginx. It's the only point in this repo where nginx's own additions
-  // (x-launch-customer-auth, x-launch-origin-auth, AWS/GCP signing headers) are
-  // visible, since they're injected after the edge function's fetch(request) call.
-  console.log(JSON.stringify({ checkpoint: "origin", ...computeHeaderSizeBreakdown(headerStore) }));
-
+  // The "origin" checkpoint for this page is logged by proxy.ts, which runs
+  // before this component on every /cf1004-test/* request — see proxy.ts.
   const cookieStore = await cookies();
   const all = cookieStore.getAll();
   const testCookies = all.filter((c) => c.name.startsWith(COOKIE_PREFIX));
