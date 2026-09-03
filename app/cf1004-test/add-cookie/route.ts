@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const COOKIE_PREFIX = "cf1004_";
 const CHUNK_BYTES = 1000; // 1KB per cookie
-const TARGET_KB = 7.57;
+const TARGET_KB = 7.0;
 const TOTAL_FILLER_BYTES = Math.round(TARGET_KB * 1000);
 
 // request.url reflects the origin's internal address behind Launch's proxy, not

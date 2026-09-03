@@ -32,7 +32,7 @@ export default async function Cf1004TestPage() {
         </h1>
         <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-400">
           Deploy this project on Contentstack Launch, then use the link below
-          to set this domain&apos;s Cookie header to <strong>7.57 KB</strong>.
+          to set this domain&apos;s Cookie header to <strong>7.0 KB</strong>.
           The edge function logs the total incoming header size on every
           request, so you can see the exact byte count once the
           platform&apos;s own layers push the total past Cloudflare&apos;s
@@ -54,7 +54,7 @@ export default async function Cf1004TestPage() {
 
         <div className="flex flex-wrap gap-3">
           <a href="/cf1004-test/add-cookie" className="underline">
-            Set cookies to 7.57 KB
+            Set cookies to 7.0 KB
           </a>
           <a href="/cf1004-test/clear" className="underline">
             Clear test cookies
@@ -62,7 +62,7 @@ export default async function Cf1004TestPage() {
         </div>
 
         <p className="text-sm text-zinc-500 dark:text-zinc-500">
-          The link resets the test cookies to exactly 7.57 KB via{" "}
+          The link resets the test cookies to exactly 7.0 KB via{" "}
           <code>Set-Cookie</code> and redirects back here, so the redirect
           request itself carries the resized header. Check the edge
           function&apos;s logs in the Launch dashboard for the{" "}
