@@ -1,5 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { computeHeaderSizeBreakdown } from "@/lib/header-size";
+import MultiHeaderTest from "./MultiHeaderTest";
 
 // Opts out of Next.js's Full Route Cache. Per the Launch caching guide, this alone
 // does not change the wire Cache-Control header — Launch's CDN caches strictly on
@@ -70,6 +71,8 @@ export default async function Cf1004TestPage() {
           total header size and how much of it isn&apos;t from these test
           cookies.
         </p>
+
+        <MultiHeaderTest />
       </main>
     </div>
   );
